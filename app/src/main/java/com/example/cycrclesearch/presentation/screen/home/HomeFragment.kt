@@ -1,7 +1,6 @@
 
 package com.example.cycrclesearch.presentation.screen.home
 
-import android.util.Log.d
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -31,7 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     override fun bindViewActionListener() {
         binding.edTitle.doAfterTextChanged {
-            viewModel.onEvent(HomeEvent.GetSearchItem("$it"))
+            viewModel.onEvent(HomeEvent.GetSearchItem(it.toString()))
         }
     }
 
@@ -58,14 +57,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         state.data?.let {
             adapter.submitList(it)
-            d("getData", "${it.map { 
-                it?.children?.size
-            }}")
         }
 
         state.errorMessage?.let {
             binding.root.showSnackBar(message = it)
-            d("getData", it)
             HomeEvent.ResetErrorMessage
         }
 

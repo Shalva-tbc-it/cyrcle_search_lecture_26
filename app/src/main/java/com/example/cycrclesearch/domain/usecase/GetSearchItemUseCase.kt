@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+
 class GetSearchItemUseCase @Inject constructor(
     private val searchItemRepository: SearchItemRepository
 ) {
@@ -21,15 +22,24 @@ class GetSearchItemUseCase @Inject constructor(
 
         return searchItemRepository.getSearchItem(title = title).map { resource ->
             if (resource is Resource.Success) {
-                val filteredList = resource.data.filter { it.name?.contains(title, ignoreCase = true) == true }
-                if (filteredList.isNotEmpty()) {
-                    Resource.Success(filteredList)
-                } else {
-                    Resource.Error("No items found for the given title")
-                }
+                val filteredList = flattenAndFilterList(resource.data, title)
+                Resource.Success(filteredList)
             } else {
                 resource
             }
         }
+    }
+
+    private fun flattenAndFilterList(list: List<GetSearchItem>, title: String): List<GetSearchItem> {
+        val flattenedList = mutableListOf<GetSearchItem>()
+        for (item in list) {
+            if (item.name.startsWith(title, ignoreCase = true)) {
+                flattenedList.add(item)
+            }
+            item.children?.let {
+                flattenedList.addAll(flattenAndFilterList(it, title))
+            }
+        }
+        return flattenedList
     }
 }

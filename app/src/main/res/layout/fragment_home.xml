@@ -11,19 +11,30 @@
         android:id="@+id/edTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/enter_search_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvSuggestions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="@string/suggestions"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/edTitle"
+        app:layout_constraintTop_toBottomOf="@id/edTitle" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edTitle" />
+        app:layout_constraintTop_toBottomOf="@id/tvSuggestions" />
 
     <ProgressBar
         android:id="@+id/progressBar"

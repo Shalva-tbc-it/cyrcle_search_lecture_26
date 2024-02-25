@@ -32,9 +32,6 @@ class AppModule {
     fun provideOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         val builder = OkHttpClient.Builder()
         builder.addInterceptor(loggingInterceptor)
-//        if (BuildConfig.DEBUG) {
-
-//        }
         return builder.build()
     }
 

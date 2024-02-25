@@ -11,7 +11,11 @@ import com.example.cycrclesearch.presentation.state.SearchItemState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,11 +28,33 @@ class HomeViewModel @Inject constructor(
     private val _searchItemState = MutableStateFlow(SearchItemState<SearchItem>())
     val searchItemState: SharedFlow<SearchItemState<SearchItem>> = _searchItemState.asStateFlow()
 
+    private val _inputText = MutableStateFlow<String>("")
+    val inputText: StateFlow<String> = _inputText
+
     fun onEvent(event: HomeEvent) {
         when(event) {
-            is HomeEvent.GetSearchItem -> getSearchItem(event.title)
+            is HomeEvent.GetSearchItem -> setInputText(event.title)
             is HomeEvent.ResetErrorMessage -> updateErrorMessage(message = null)
         }
+    }
+
+    private fun setInputText(text: String) {
+        _inputText.value = text
+    }
+
+    init {
+        observeInputText()
+    }
+
+    private fun observeInputText() {
+        _inputText
+            .debounce(1500)
+            .onEach { text ->
+                if (_inputText.value == text) {
+                    getSearchItem(text)
+                }
+            }
+            .launchIn(viewModelScope)
     }
 
     private fun getSearchItem(title: String) {
