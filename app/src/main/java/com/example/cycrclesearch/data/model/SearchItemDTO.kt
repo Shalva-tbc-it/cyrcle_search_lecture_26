@@ -10,7 +10,7 @@ data class SearchItemDTO(
     @Json(name = "bgl_variant")
     val bglVariant: String? = null,
     @Json(name = "children")
-    val children: List<ChildrenDTO>,
+    val children: List<SearchItemDTO>?,
     @Json(name = "createdAt")
     val createdAt: String,
     @Json(name = "main")

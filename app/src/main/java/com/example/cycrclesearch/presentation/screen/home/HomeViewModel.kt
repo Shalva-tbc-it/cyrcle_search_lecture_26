@@ -26,14 +26,14 @@ class HomeViewModel @Inject constructor(
 
     fun onEvent(event: HomeEvent) {
         when(event) {
-            is HomeEvent.GetSearchItem -> getSearchItem()
+            is HomeEvent.GetSearchItem -> getSearchItem(event.title)
             is HomeEvent.ResetErrorMessage -> updateErrorMessage(message = null)
         }
     }
 
-    private fun getSearchItem() {
+    private fun getSearchItem(title: String) {
         viewModelScope.launch {
-            searchItemUseCase.invoke().collect { resource ->
+            searchItemUseCase.invoke(title = title).collect { resource ->
                 when (resource) {
                     is Resource.Loading -> {
                         _searchItemState.update { state ->

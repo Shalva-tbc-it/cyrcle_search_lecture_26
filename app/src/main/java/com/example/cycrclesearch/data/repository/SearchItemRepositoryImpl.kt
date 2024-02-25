@@ -15,14 +15,13 @@ class SearchItemRepositoryImpl @Inject constructor(
     private val searchItemService: SearchItemService
 ): SearchItemRepository {
 
-    override suspend fun getSearchItem(): Flow<Resource<List<GetSearchItem>>> {
+    override suspend fun getSearchItem(title: String): Flow<Resource<List<GetSearchItem>>> {
         return handleResponse.safeApiCall {
-            searchItemService.getSearchItem()
+            searchItemService.getSearchItem(title = title)
         }.asResource { listDTO ->
             listDTO.map {
                 it.toDomain()
             }
         }
     }
-
 }

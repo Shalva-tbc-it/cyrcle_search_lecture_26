@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchItemRepository {
 
-    suspend fun getSearchItem(): Flow<Resource<List<GetSearchItem>>>
+    suspend fun getSearchItem(title: String): Flow<Resource<List<GetSearchItem>>>
 
 }
